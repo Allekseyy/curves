@@ -1,3 +1,5 @@
+# This makefile creates solid exe file
+
 all:
 	g++ .\src\main.cpp .\src\curve.h .\src\curve.cpp -o .\build\curves 
 
