@@ -1,3 +1,5 @@
+# This Makefile creates dll library and exe for its testing 
+
 DLL_OBJS = obj/curve.o
 EXE_OBJS = obj/curvetest.o
 
