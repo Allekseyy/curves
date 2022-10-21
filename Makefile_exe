@@ -1,0 +1,5 @@
+all:
+	g++ .\src\main.cpp .\src\curve.h .\src\curve.cpp -o .\build\curves 
+
+clean:
+	rm -f .\build\curves
