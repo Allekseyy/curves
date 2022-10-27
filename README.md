@@ -1,6 +1,6 @@
 # curves
 
-This projects implements the task from [PDF file](https://github.com/Allekseyy/curves/blob/main/CADEX%20C%2B%2B%20assignment%20v4%20for%20probationers%20(2).pdf).
+This project implements the task from [PDF file](https://github.com/Allekseyy/curves/blob/main/CADEX%20C%2B%2B%20assignment%20v4%20for%20probationers%20(2).pdf).
 
 ## Contents
 
