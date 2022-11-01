@@ -29,19 +29,22 @@ class MyVector{
     Point m_head;
     double m_length;
 public:
-    MyVector(Point begin, Point end): m_tail(begin), m_head(end), m_length(end.distance(begin)) {}
+    MyVector(Point begin, Point end): 
+        m_tail(begin), m_head(end), m_length(end.distance(begin)) {}
     double GetLength();
     std::string to_string() const;
 };
 
 
 class CurveFabric{
-private:
+public:
+    enum CurveType { CIRCLE, ELLIPSE, HELIX };
+
     class Curve{
     protected:
         double m_radius;
 
-        Curve(double r) : m_radius(r) {}
+        Curve(double radius) throw(std::invalid_argument);
     public:    
         virtual ~Curve() {}
         
@@ -63,25 +66,10 @@ private:
         virtual bool operator>= (const Curve& c) const;
     };
 
-    typedef std::vector<std::shared_ptr<Curve>> CurvePtrVec;
-
-    CurvePtrVec m_curves;           // Container for task 2
-    CurvePtrVec m_pickedCurves;     // Container for task 4
-
-    void PrintCurves(const CurvePtrVec &curves) const;
-    static bool comparePtrToCurve(const std::shared_ptr<CurveFabric::Curve> &a, 
-                                    const std::shared_ptr<CurveFabric::Curve> &b);
-
-public:
-    friend class Ellipse;
-    friend class Helix;
-
-    enum CurveType { CIRCLE, ELLIPSE, HELIX };
-
     ~CurveFabric() {}
 
     void MakeCurves(unsigned int number); // Task 2
-    std::shared_ptr<CurveFabric::Curve> MakeRandomCurve() const;
+    std::shared_ptr<CurveFabric::Curve> MakeRandomCurve() const throw(std::invalid_argument);
     void PrintAllCurves() const;
     void PrintPickedCurves() const;
 
@@ -90,13 +78,25 @@ public:
     void SortPicked();                  // Task 5
     long double RadSum() const;         // Task 6
     void TestMem();                     // To ensure that containers shares objects
+
+protected:
+    static bool comparePtrToCurve(const std::shared_ptr<CurveFabric::Curve> &a, 
+                                    const std::shared_ptr<CurveFabric::Curve> &b);
+
+private:
+    typedef std::vector<std::shared_ptr<Curve>> CurvePtrVec;
+
+    CurvePtrVec m_curves;           // Container for task 2
+    CurvePtrVec m_pickedCurves;     // Container for task 4
+
+    void PrintCurves(const CurvePtrVec &curves) const;
 };
 
 class Ellipse : public CurveFabric::Curve{
 private:
     double m_radius2;
 public:
-    Ellipse(double r1, double r2) : CurveFabric::Curve(r1), m_radius2(r2) {}
+    Ellipse(double r1, double r2);
 
     virtual unsigned int GetType() const { return CurveFabric::ELLIPSE; }
     virtual Point GetPoint(double t) const;

@@ -29,6 +29,13 @@ std::string MyVector::to_string() const{
 }
 
 
+CurveFabric::Curve::Curve(double radius) 
+    : m_radius(radius) 
+{
+    if(radius < 0)
+        throw std::invalid_argument("Radius cannot be less than zero");
+}
+
 bool CurveFabric::Curve::operator== (const CurveFabric::Curve& c) const {
     return this->m_radius == c.m_radius;
 }
@@ -54,6 +61,13 @@ bool CurveFabric::Curve::operator>= (const CurveFabric::Curve& c) const {
 }
 
 
+Ellipse::Ellipse(double r1, double r2) 
+    : CurveFabric::Curve(r1), m_radius2(r2) 
+{
+    if(r2 < 0)
+        throw std::invalid_argument("Radius cannot be less than zero");
+}
+
 Point Ellipse::GetPoint(double t) const {
     return Point(m_radius * cos(t), m_radius2 * sin(t), 0);
 }
@@ -78,6 +92,7 @@ std::string Circle::to_string() const {
     coordsStream << std::scientific << "Circle r: " << m_radius;
     return coordsStream.str();
 }
+
 
 Point Helix::GetPoint(double t) const {
     return Point(m_radius * cos(t), m_radius * sin(t), m_step * t);
@@ -113,29 +128,36 @@ std::shared_ptr<CurveFabric::Curve> CurveFabric::MakeRandomCurve() const{
     unsigned int Type = distType(rng);
     double radius = dist(rng);
 
-
     std::shared_ptr<Curve> CurvePtr; 
-    switch (Type)
+
+    try{
+        switch (Type)
+        {
+        case CIRCLE:{
+            // std::cerr << "creating circle radius " << radius << std::endl;
+            CurvePtr.reset(new Circle(radius));
+            break;
+        }
+        case ELLIPSE:{
+            double radius2 = dist(rng);
+            // std::cerr << "creating ellipse radius " << radius1 << " radius2 " << radius2 << std::endl;
+            CurvePtr.reset(new Ellipse(radius, radius2));
+            break;
+        }
+        case HELIX:{
+            double step = dist(rng);
+            // std::cerr << "creating helix radius " << radius << " step " << step << std::endl;
+            CurvePtr.reset(new Helix(radius, step));
+            break;
+        }
+        default:
+            return nullptr;
+        }
+    }
+    catch(std::invalid_argument &ex)
     {
-    case CIRCLE:{
-        // std::cerr << "creating circle radius " << radius << std::endl;
-        CurvePtr.reset(new Circle(radius));
-        break;
-    }
-    case ELLIPSE:{
-        double radius2 = dist(rng);
-        // std::cerr << "creating ellipse radius " << radius1 << " radius2 " << radius2 << std::endl;
-        CurvePtr.reset(new Ellipse(radius, radius2));
-        break;
-    }
-    case HELIX:{
-        double step = dist(rng);
-        // std::cerr << "creating helix radius " << radius << " step " << step << std::endl;
-        CurvePtr.reset(new Helix(radius, step));
-        break;
-    }
-    default:
-         return nullptr;
+        std::cout << "CurveFabric couldn't create a curve: " << ex.what() << std::endl;
+        terminate();
     }
     return CurvePtr;
 }
@@ -193,6 +215,6 @@ void CurveFabric::TestMem(){
         std::cout << std::endl;
         PrintAllCurves();
         std::cout << std::endl;
-        PrintPickedCurves();
+        PrintPickedCurves();    
     }
     
