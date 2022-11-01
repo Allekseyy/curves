@@ -14,7 +14,8 @@ double Point::distance(const Point &p) const {
 
 std::string Point::to_string() const{
     std::ostringstream coordsStream;
-    coordsStream << std::scientific << 
+    coordsStream.precision(6);
+    coordsStream << std::fixed << 
             "x: " << m_x << " y: " << m_y << " z: " <<  m_z;
     return coordsStream.str();
 }
@@ -29,7 +30,7 @@ std::string MyVector::to_string() const{
 }
 
 
-CurveFabric::Curve::Curve(double radius) 
+CurveFabric::Curve::Curve(double radius)
     : m_radius(radius) 
 {
     if(radius < 0)
@@ -81,7 +82,8 @@ MyVector Ellipse::GetDeriv(double t) const {
 
 std::string Ellipse::to_string() const {
     std::ostringstream coordsStream;
-    coordsStream << std::scientific << "Ellipse r1: " << m_radius <<
+    coordsStream.precision(6);
+    coordsStream << std::fixed << "Ellipse r1: " << m_radius <<
                 " r2: " << m_radius2;
     return coordsStream.str();
 }
@@ -89,7 +91,8 @@ std::string Ellipse::to_string() const {
 
 std::string Circle::to_string() const {
     std::ostringstream coordsStream;
-    coordsStream << std::scientific << "Circle r: " << m_radius;
+    coordsStream.precision(6);
+    coordsStream << std::fixed << "Circle r: " << m_radius;
     return coordsStream.str();
 }
 
@@ -108,7 +111,8 @@ MyVector Helix::GetDeriv(double t) const {
 
 std::string Helix::to_string() const {
     std::ostringstream stepStream;
-    stepStream << std::scientific << "Helix r: " << m_radius << 
+    stepStream.precision(6);
+    stepStream << std::fixed << "Helix r: " << m_radius << 
             " step: " << m_step;
     return stepStream.str();
 }
@@ -123,7 +127,7 @@ std::shared_ptr<CurveFabric::Curve> CurveFabric::MakeRandomCurve() const{
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<> distType(0,2);
-    std::uniform_real_distribution<> dist(0, std::numeric_limits<double>::max());
+    std::uniform_real_distribution<> dist(0, 100);
 
     unsigned int Type = distType(rng);
     double radius = dist(rng);
@@ -157,7 +161,7 @@ std::shared_ptr<CurveFabric::Curve> CurveFabric::MakeRandomCurve() const{
     catch(std::invalid_argument &ex)
     {
         std::cout << "CurveFabric couldn't create a curve: " << ex.what() << std::endl;
-        terminate();
+        std::terminate();
     }
     return CurvePtr;
 }
@@ -165,7 +169,7 @@ std::shared_ptr<CurveFabric::Curve> CurveFabric::MakeRandomCurve() const{
 void CurveFabric::PrintCurves(const CurvePtrVec &curves) const {
     std::cout << curves.size() << " curves in container:" << std::endl;
     for(const auto &curve:curves)
-        std::cout << curve->to_string() << "(address " << curve.get()  << ")" << std::endl;
+        std::cout << curve->to_string() << " (address " << curve.get()  << ")" << std::endl;
 }
 
 void CurveFabric::PrintAllCurves() const {

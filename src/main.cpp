@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <cstdio>
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 int main(){
@@ -13,7 +14,7 @@ int main(){
     std::cout << std::endl;
 
 // Task 3    
-    fabric.PrintDerivs(M_PI_4);
+    fabric.PrintDerivs(M_PI/4);
     std::cout << std::endl;
 
 // Task 4

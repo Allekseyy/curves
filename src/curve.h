@@ -44,7 +44,7 @@ public:
     protected:
         double m_radius;
 
-        Curve(double radius) throw(std::invalid_argument);
+        Curve(double radius);
     public:    
         virtual ~Curve() {}
         
@@ -69,7 +69,7 @@ public:
     ~CurveFabric() {}
 
     void MakeCurves(unsigned int number); // Task 2
-    std::shared_ptr<CurveFabric::Curve> MakeRandomCurve() const throw(std::invalid_argument);
+    std::shared_ptr<CurveFabric::Curve> MakeRandomCurve() const;
     void PrintAllCurves() const;
     void PrintPickedCurves() const;
 
